@@ -14,6 +14,7 @@ public class ClienteDTO {
     private String numero;
     private BairroDTO bairro;
     private String pontoReferencia;
+    
 
     public int getCodigo() {
         return codigo;
@@ -87,6 +88,7 @@ public class ClienteDTO {
         this.telefone = telefone;
     }
 
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

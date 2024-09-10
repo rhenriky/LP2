@@ -7,6 +7,7 @@ public class GrupoAlimentarDTO {
     
     private int codigo;
     private String nome;
+  
 
     public int getCodigo() {
         return codigo;
@@ -24,8 +25,10 @@ public class GrupoAlimentarDTO {
         this.nome = nome;
     }
 
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
+
 }

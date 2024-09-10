@@ -3,12 +3,11 @@ package ifmt.cba.dto;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class BairroDTO {
+public class TipoPreparoDTO {
 
     private int codigo;
-    private String nome;
-    private float custoEntrega;
-   
+    private String descricao;
+
 
     public int getCodigo() {
         return codigo;
@@ -18,20 +17,12 @@ public class BairroDTO {
         this.codigo = codigo;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public float getCustoEntrega() {
-        return custoEntrega;
-    }
-
-    public void setCustoEntrega(float custoEntrega) {
-        this.custoEntrega = custoEntrega;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @Override

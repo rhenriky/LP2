@@ -1,14 +1,17 @@
 package ifmt.cba.dto;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class BairroDTO {
+public class CardapioDTO {
 
     private int codigo;
     private String nome;
-    private float custoEntrega;
-   
+    private String descricao;
+    private List<PreparoProdutoDTO> listaPreparoProduto;
+  
 
     public int getCodigo() {
         return codigo;
@@ -26,12 +29,20 @@ public class BairroDTO {
         this.nome = nome;
     }
 
-    public float getCustoEntrega() {
-        return custoEntrega;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setCustoEntrega(float custoEntrega) {
-        this.custoEntrega = custoEntrega;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public List<PreparoProdutoDTO> getListaPreparoProduto() {
+        return listaPreparoProduto;
+    }
+
+    public void setListaPreparoProduto(List<PreparoProdutoDTO> listaPreparoProduto) {
+        this.listaPreparoProduto = listaPreparoProduto;
     }
 
     @Override

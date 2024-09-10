@@ -3,12 +3,14 @@ package ifmt.cba.dto;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class BairroDTO {
+public class EntregadorDTO {
 
     private int codigo;
     private String nome;
-    private float custoEntrega;
-   
+    private String RG;
+    private String CPF;
+    private String telefone;
+  
 
     public int getCodigo() {
         return codigo;
@@ -26,14 +28,31 @@ public class BairroDTO {
         this.nome = nome;
     }
 
-    public float getCustoEntrega() {
-        return custoEntrega;
+    public String getRG() {
+        return RG;
     }
 
-    public void setCustoEntrega(float custoEntrega) {
-        this.custoEntrega = custoEntrega;
+    public void setRG(String rG) {
+        RG = rG;
     }
 
+    public String getCPF() {
+        return CPF;
+    }
+
+    public void setCPF(String cPF) {
+        CPF = cPF;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
