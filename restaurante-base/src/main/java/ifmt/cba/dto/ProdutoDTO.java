@@ -7,11 +7,11 @@ public class ProdutoDTO {
     
     private int codigo;
     private String nome;
-    private float custoUnidade;
+    private float custounidade;
     private int valorEnergetico;
     private int estoque;
     private int estoqueMinimo;
-    private GrupoAlimentarDTO grupoAlimentar;
+    private GrupoAlimentoDTO grupoAlimento;
    
 
     public int getCodigo() {
@@ -30,12 +30,12 @@ public class ProdutoDTO {
         this.nome = nome;
     }
 
-    public float getCustoUnidade() {
-        return custoUnidade;
+    public float getcustounidade() {
+        return custounidade;
     }
 
-    public void setCustoUnidade(float custoUnidade) {
-        this.custoUnidade = custoUnidade;
+    public void setCustoUnidade(float custounidade) {
+        this.custounidade = custounidade;
     }
 
     public int getValorEnergetico() {
@@ -46,12 +46,12 @@ public class ProdutoDTO {
         this.valorEnergetico = valorEnergetico;
     }
 
-    public GrupoAlimentarDTO getGrupoAlimentar() {
-        return grupoAlimentar;
+    public GrupoAlimentoDTO getGrupoAlimentar() {
+        return grupoAlimento;
     }
 
-    public void setGrupoAlimentar(GrupoAlimentarDTO grupoAlimentar) {
-        this.grupoAlimentar = grupoAlimentar;
+    public void setGrupoAlimento(GrupoAlimentoDTO grupoAlimento) {
+        this.grupoAlimento = grupoAlimento;
     }
 
     public int getEstoque() {

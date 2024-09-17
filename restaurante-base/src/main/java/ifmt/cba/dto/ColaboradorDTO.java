@@ -10,7 +10,7 @@ public class ColaboradorDTO {
     private String RG;
     private String CPF;
     private String telefone;
-   
+    private String cargo;  // Novo campo adicionado
 
     public int getCodigo() {
         return codigo;
@@ -52,6 +52,13 @@ public class ColaboradorDTO {
         this.telefone = telefone;
     }
 
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
 
     @Override
     public String toString() {

@@ -1,63 +1,34 @@
 package ifmt.cba.persistencia;
 
-import java.util.List;
 import ifmt.cba.entity.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
+import java.util.List;
 
 public class ProdutoDAO extends DAO<Produto> {
 
-    public ProdutoDAO (EntityManager entityManager) throws PersistenciaException {
-        super (entityManager);
-    }
-
-    public Produto buscarPorCodigo (int codigo) throws PersistenciaException {
-
-        Produto produto = null;
-
-        try{
-            produto = this.entityManager.find(Produto.class, codigo);
-        } catch (Exception ex) {
-            throw new PersistenciaException("Erro na selecao por codigo--" + ex.getMessage());
-        }
-        return produto;
+    public ProdutoDAO(EntityManager entityManager) throws PersistenciaException {
+        super(entityManager);
     }
 
     @SuppressWarnings("unchecked")
-    public List<Produto> buscarPorGrupoAlimentar(int codigoGrupo) throws PersistenciaException {
-        List <Produto> listaProduto;
-        try{
-        Query query = this.entityManager.createNamedQuery("SELECT p FROM Produto P WHERE p.grupoAlimentar.codigo =:codgrupo ORDER BY p..Nome");
-        query.setParameter("codgrupo",codigoGrupo);
-        listaProduto = query.getResultList();    
-    } catch (Exception ex) {
-        throw new PersistenciaException("Erro na selacao por grupo alimentar --" +ex.getMessage());
+    public List<Produto> buscarTodosOrdenadosPorNome() throws PersistenciaException {
+        try {
+            Query query = this.entityManager.createQuery("SELECT p FROM Produto p ORDER BY p.nome");
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new PersistenciaException("Erro ao buscar produtos ordenados por nome: " + e.getMessage());
+        }
     }
-    return listaProduto;
-}
 
-@SuppressWarnings("unchecked")
-public List<Produto> buscarPorParteNome(String nome) throws PersistenciaException{
-    List <Produto> listaProduto;
-    try {
-        Query query = this.entityManager.createNamedQuery("SELECT p FROM Produto p WHERE UPPER(p . nome ) LIKE : pNome ORDER BY p . nome");
-        query.setParameter("pNome","%" + nome.toUpperCase().trim()+"%");
-        listaProduto = query.getResultList();
-    } catch (Exception ex) {
-        throw new PersistenciaException("Erro na selecao por parte do nome-" + ex.getMessage());
+    @SuppressWarnings("unchecked")
+    public List<Produto> buscarProdutosComEstoqueBaixo() throws PersistenciaException {
+        try {
+            Query query = this.entityManager.createQuery("SELECT p FROM Produto p WHERE p.estoque < p.estoqueMinimo");
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new PersistenciaException("Erro ao buscar produtos com estoque baixo: " + e.getMessage());
+        }
     }
-        return listaProduto;
-    }
-@SuppressWarnings("unchecked")
-public List <Produto> buscarProdutoAbaixoEstoqueMinimo() throws PersistenciaException {
-    List<Produto> listaProduto;
-    try {
-        Query query = this.entityManager.createNamedQuery("SELECT p FROM Produto p WHERE p . e s toque < p . estoqueMinimo ORDER BY p . nome");
-        listaProduto = query.getResultList();
-    } catch (Exception ex) {
-        throw new PersistenciaException("Erro na selecao por estoque minimo --" +ex.getMessage());
-    }    
-    return listaProduto;
-}
 }

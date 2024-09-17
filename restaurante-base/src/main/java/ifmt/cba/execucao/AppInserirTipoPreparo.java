@@ -14,11 +14,11 @@ public class AppInserirTipoPreparo {
             TipoPreparoNegocio tipoPreparoNegocio = new TipoPreparoNegocio(tipoPreparoDAO);
 
             TipoPreparoDTO tipoPreparoDTO = new TipoPreparoDTO();
-            tipoPreparoDTO.setDescricao("Assado");
+            tipoPreparoDTO.setDescricao("Molho");
             tipoPreparoNegocio.inserir(tipoPreparoDTO);
 
             tipoPreparoDTO = new TipoPreparoDTO();
-            tipoPreparoDTO.setDescricao("Frito");
+            tipoPreparoDTO.setDescricao("Refogado");
             tipoPreparoNegocio.inserir(tipoPreparoDTO);
 
         } catch (PersistenciaException | NegocioException e) {

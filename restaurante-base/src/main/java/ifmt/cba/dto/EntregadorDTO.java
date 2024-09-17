@@ -10,7 +10,11 @@ public class EntregadorDTO {
     private String RG;
     private String CPF;
     private String telefone;
-  
+    private String veiculo; // Adicionando o atributo veiculo
+
+    public EntregadorDTO(int i, String string, String string2) {
+        
+    }
 
     public int getCodigo() {
         return codigo;
@@ -32,16 +36,16 @@ public class EntregadorDTO {
         return RG;
     }
 
-    public void setRG(String rG) {
-        RG = rG;
+    public void setRG(String RG) {
+        this.RG = RG;
     }
 
     public String getCPF() {
         return CPF;
     }
 
-    public void setCPF(String cPF) {
-        CPF = cPF;
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
     }
 
     public String getTelefone() {
@@ -52,7 +56,14 @@ public class EntregadorDTO {
         this.telefone = telefone;
     }
 
-    
+    public String getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(String veiculo) {
+        this.veiculo = veiculo;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

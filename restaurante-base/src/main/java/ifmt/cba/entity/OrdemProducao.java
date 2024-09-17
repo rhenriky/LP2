@@ -3,12 +3,8 @@ package ifmt.cba.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ordem_producao")
@@ -22,10 +18,12 @@ public class OrdemProducao {
     private String descricao;
 
     @Column(name = "data_registro")
-    private java.time.LocalDateTime dataRegistro;
+    private LocalDateTime dataRegistro;
 
-    @Column(name = "estado_codigo")
-    private int estadoCodigo;
+    // Relacionamento com EstadoOrdemProducao
+    @ManyToOne(cascade = CascadeType.ALL) // Comportamento em cascata
+    @JoinColumn(name = "estado_codigo", referencedColumnName = "codigo")
+    private EstadoOrdemProducao estadoOrdemProducao;
 
     public int getCodigo() {
         return codigo;
@@ -43,20 +41,20 @@ public class OrdemProducao {
         this.descricao = descricao;
     }
 
-    public java.time.LocalDateTime getDataRegistro() {
+    public LocalDateTime getDataRegistro() {
         return dataRegistro;
     }
 
-    public void setDataRegistro(java.time.LocalDateTime dataRegistro) {
+    public void setDataRegistro(LocalDateTime dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
 
-    public int getEstadoCodigo() {
-        return estadoCodigo;
+    public EstadoOrdemProducao getEstadoOrdemProducao() {
+        return estadoOrdemProducao;
     }
 
-    public void setEstadoCodigo(int estadoCodigo) {
-        this.estadoCodigo = estadoCodigo;
+    public void setEstadoOrdemProducao(EstadoOrdemProducao estadoOrdemProducao) {
+        this.estadoOrdemProducao = estadoOrdemProducao;
     }
 
     @Override
@@ -85,15 +83,15 @@ public class OrdemProducao {
         String retorno = "";
 
         if (this.descricao == null || this.descricao.length() < 3) {
-            retorno += "Descrição inválida";
+            retorno += "Descrição inválida.";
         }
 
         if (this.dataRegistro == null) {
-            retorno += "Data de registro inválida";
+            retorno += "Data de registro inválida.";
         }
 
-        if (this.estadoCodigo <= 0) {
-            retorno += "Estado inválido";
+        if (this.estadoOrdemProducao == null || this.estadoOrdemProducao.getCodigo() <= 0) {
+            retorno += "Estado inválido.";
         }
 
         return retorno;

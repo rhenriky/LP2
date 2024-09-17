@@ -6,142 +6,100 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "produto")
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
 
-    @Column(name = "nome")
+    @Column(nullable = false)
     private String nome;
 
-    @Column(name = "custo_unidade")
-    private float custoUnidade;
+    @Column(nullable = false)
+    private float custounidade;
 
-    @Column(name = "valor_energetico")
+    @Column(nullable = false)
     private int valorEnergetico;
 
-    @Column(name = "estoque")
+    @Column(nullable = false)
     private int estoque;
 
-    @Column(name = "estoque_minimo")
+    @Column(nullable = false)
     private int estoqueMinimo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_grupo")
-    private GrupoAlimentar grupoAlimentar;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "grupo_alimento_id", 
+        nullable = false
 
-    public int getCodigo(){
+    )
+    private GrupoAlimento grupoAlimento;
+
+    // Getters e setters
+
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo){
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
-    public void setNome(String nome){
+
+    public void setNome(String nome) {
         this.nome = nome;
     }
-    public float getCustoUnidade(){
-        return custoUnidade;
-    }
-    public void setCustoUnidade(float custoUnidade){
-        this.custoUnidade = custoUnidade;
+
+    public float getCustoUnidade() {
+        return custounidade;
     }
 
-    public int getValorEnergetico(){
+    public void setCustounidade(float custounidade) {
+        this.custounidade = custounidade;
+    }
+
+    public int getValorEnergetico() {
         return valorEnergetico;
     }
 
-    public void setValorEnergetico(int valorEnergetico){
+    public void setValorEnergetico(int valorEnergetico) {
         this.valorEnergetico = valorEnergetico;
     }
-    public GrupoAlimentar getGrupoAlimentar(){
-        return grupoAlimentar;
-    }
 
-    public void setGrupoAlimentar(GrupoAlimentar grupoAlimentar){
-        this.grupoAlimentar = grupoAlimentar;
-    }
-    
-    public int getEstoque (){
+    public int getEstoque() {
         return estoque;
     }
-    public void setEstoque(int estoque){
+
+    public void setEstoque(int estoque) {
         this.estoque = estoque;
     }
-    public int getEstoqueMinimo(){
+
+    public int getEstoqueMinimo() {
         return estoqueMinimo;
     }
-    public void setEstoqueMinimo(int estoqueMinimo){
+
+    public void setEstoqueMinimo(int estoqueMinimo) {
         this.estoqueMinimo = estoqueMinimo;
     }
-    @Override
-    public String toString(){
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
-    }
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + codigo;
-        return result;
+
+    public GrupoAlimento getGrupoAlimento() {
+        return grupoAlimento;
     }
 
-    @Override
-
-    public boolean equals(Object obj){
-        if (this == obj)
-            return true;
-        
-        if (obj == null)
-            return false;
-
-        if (getClass() != obj.getClass())
-            return false;
-        
-        Produto other = (Produto) obj;
-        if (codigo != other.codigo)
-            return false;
-        return true;        
+    public void setGrupoAlimento(GrupoAlimento grupoAlimento) {
+        this.grupoAlimento = grupoAlimento;
     }
-    public String validar () {
-        String retorno = "";
-
-        if (this.nome == null || this.nome.length()<3){
-            retorno += "Nome invalido";
-        }
-
-        if (this.custoUnidade <= 0){
-            retorno += "Custo por unidade invalido";
-        }
-
-        if (this.valorEnergetico < 0){
-            retorno += "Valor energetico invalido";
-        }
-
-        if (estoque < 0) {
-            retorno += "Estoque invalido";
-        }
-
-        if (this.grupoAlimentar == null || !this.grupoAlimentar.validar().isEmpty()){
-            retorno +="Grupo alimentar invalido";
-        }
-        return retorno;
-    }
-
-
-    
 }

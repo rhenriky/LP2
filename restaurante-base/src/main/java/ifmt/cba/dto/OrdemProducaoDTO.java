@@ -13,7 +13,6 @@ public class OrdemProducaoDTO {
     private CardapioDTO cardapio;
     private EstadoOrdemProducaoDTO estado;
     private List<ItemOrdemProducaoDTO> listaItens;
-    
 
     public int getCodigo() {
         return codigo;
@@ -29,6 +28,11 @@ public class OrdemProducaoDTO {
 
     public void setDataProducao(LocalDate dataProducao) {
         this.dataProducao = dataProducao;
+    }
+
+    // Define a data de produção para a data atual
+    public void setDataAtual() {
+        this.dataProducao = LocalDate.now();
     }
 
     public List<ItemOrdemProducaoDTO> getListaItens() {
@@ -56,6 +60,7 @@ public class OrdemProducaoDTO {
     }
 
     
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

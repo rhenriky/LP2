@@ -16,17 +16,19 @@ public class EstadoPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int codigo;
+    private int id;  // Alterado de 'codigo' para 'id' para manter consistência
 
     @Column(name = "descricao")
     private String descricao;
 
-    public int getCodigo() {
-        return codigo;
+    // Implementando o método getId()
+    public int getId() {
+        return id;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    // Implementando o método setId(), se necessário
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescricao() {
@@ -41,7 +43,7 @@ public class EstadoPedido {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + codigo;
+        result = prime * result + id;  // Alterado de 'codigo' para 'id'
         return result;
     }
 
@@ -54,7 +56,7 @@ public class EstadoPedido {
         if (getClass() != obj.getClass())
             return false;
         EstadoPedido other = (EstadoPedido) obj;
-        if (codigo != other.codigo)
+        if (id != other.id)  // Alterado de 'codigo' para 'id'
             return false;
         return true;
     }
@@ -72,5 +74,22 @@ public class EstadoPedido {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+    }
+
+    // Implementando o método name() para retornar o nome do estado (supondo que a descrição seja o nome)
+    public String name() {
+        return this.descricao;
+    }
+
+    // Implementando o método valueOf() para criar um EstadoPedido a partir de uma string (simulação)
+    public static EstadoPedido valueOf(String estado) {
+        EstadoPedido estadoPedido = new EstadoPedido();
+        estadoPedido.setDescricao(estado);
+        return estadoPedido;
+    }
+
+    public int getCodigo() {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'getCodigo'");
     }
 }

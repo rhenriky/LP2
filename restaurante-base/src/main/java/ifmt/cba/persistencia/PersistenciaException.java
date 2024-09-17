@@ -4,7 +4,7 @@ public class PersistenciaException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public PersistenciaException() {
+	public PersistenciaException(String string, Exception ex) {
 		super("Erro ocorrido na manipulacao do banco de dados");
 	}
 

@@ -3,6 +3,7 @@ package ifmt.cba.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import ifmt.cba.dto.EntregadorDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -87,5 +88,10 @@ public class Entregador {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+    }
+
+    public void setCpf(Class<? extends EntregadorDTO> class1) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'setCpf'");
     }
 }

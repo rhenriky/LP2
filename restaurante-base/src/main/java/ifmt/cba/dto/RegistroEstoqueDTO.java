@@ -1,7 +1,6 @@
 package ifmt.cba.dto;
 
 import java.time.LocalDate;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -9,11 +8,8 @@ public class RegistroEstoqueDTO {
 
     private int codigo;
     private ProdutoDTO produto;
-    private MovimentoEstoqueDTO movimento;
     private LocalDate data;
     private int quantidade;
-    
-
 
     public int getCodigo() {
         return codigo;
@@ -29,14 +25,6 @@ public class RegistroEstoqueDTO {
 
     public void setProduto(ProdutoDTO produto) {
         this.produto = produto;
-    }
-
-    public MovimentoEstoqueDTO getMovimento() {
-        return movimento;
-    }
-
-    public void setMovimento(MovimentoEstoqueDTO movimento) {
-        this.movimento = movimento;
     }
 
     public int getQuantidade() {
@@ -55,10 +43,8 @@ public class RegistroEstoqueDTO {
         this.data = data;
     }
 
-    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
-
 }

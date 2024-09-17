@@ -2,13 +2,11 @@ package ifmt.cba.negocio;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
-
 import ifmt.cba.dto.ItemOrdemProducaoDTO;
-import ifmt.cba.entity.ItemOrdemProducao;
 import ifmt.cba.persistencia.ItemOrdemProducaoDAO;
 import ifmt.cba.persistencia.PersistenciaException;
+import ifmt.cba.entity.ItemOrdemProducao;
 
 public class ItemOrdemProducaoNegocio {
 
@@ -20,7 +18,7 @@ public class ItemOrdemProducaoNegocio {
         this.modelMapper = new ModelMapper();
     }
 
-    public void inserir(ItemOrdemProducaoDTO itemOrdemProducaoDTO) throws NegocioException {
+    public void inserir(ItemOrdemProducaoDTO itemOrdemProducaoDTO) throws NegocioException, PersistenciaException {
         ItemOrdemProducao itemOrdemProducao = this.toEntity(itemOrdemProducaoDTO);
         String mensagemErros = itemOrdemProducao.validar();
 
@@ -30,11 +28,11 @@ public class ItemOrdemProducaoNegocio {
 
         try {
             itemOrdemProducaoDAO.beginTransaction();
-            itemOrdemProducaoDAO.incluir(itemOrdemProducao);
+            itemOrdemProducaoDAO.inserir(itemOrdemProducao);
             itemOrdemProducaoDAO.commitTransaction();
-        } catch (PersistenciaException ex) {
+        } catch (PersistenciaException e) {
             itemOrdemProducaoDAO.rollbackTransaction();
-            throw new NegocioException("Erro ao incluir o item de ordem de produção - " + ex.getMessage());
+            throw new NegocioException("Erro ao incluir o item de ordem de produção - " + e.getMessage());
         }
     }
 
@@ -92,20 +90,37 @@ public class ItemOrdemProducaoNegocio {
         }
     }
 
-    public List<ItemOrdemProducaoDTO> toDTOAll(List<ItemOrdemProducao> listaItemOrdemProducao) {
-        List<ItemOrdemProducaoDTO> listaDTO = new ArrayList<>();
-
-        for (ItemOrdemProducao itemOrdemProducao : listaItemOrdemProducao) {
-            listaDTO.add(this.toDTO(itemOrdemProducao));
+    public List<ItemOrdemProducaoDTO> pesquisarOrdensProducoesRegistradas() throws NegocioException {
+        try {
+            List<ItemOrdemProducao> listaItemOrdemProducao = itemOrdemProducaoDAO.buscarOrdensProducoesRegistradas();
+            return this.toDTOAll(listaItemOrdemProducao);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Erro ao pesquisar ordens de produção registradas - " + ex.getMessage());
         }
-        return listaDTO;
     }
 
-    public ItemOrdemProducaoDTO toDTO(ItemOrdemProducao itemOrdemProducao) {
-        return this.modelMapper.map(itemOrdemProducao, ItemOrdemProducaoDTO.class);
+    public List<ItemOrdemProducaoDTO> pesquisarOrdensProducoesProcessadas() throws NegocioException {
+        try {
+            List<ItemOrdemProducao> listaItemOrdemProducao = itemOrdemProducaoDAO.buscarOrdensProducoesProcessadas();
+            return this.toDTOAll(listaItemOrdemProducao);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Erro ao pesquisar ordens de produção processadas - " + ex.getMessage());
+        }
     }
 
-    public ItemOrdemProducao toEntity(ItemOrdemProducaoDTO itemOrdemProducaoDTO) {
-        return this.modelMapper.map(itemOrdemProducaoDTO, ItemOrdemProducao.class);
+    private ItemOrdemProducaoDTO toDTO(ItemOrdemProducao itemOrdemProducao) {
+        return modelMapper.map(itemOrdemProducao, ItemOrdemProducaoDTO.class);
+    }
+
+    private List<ItemOrdemProducaoDTO> toDTOAll(List<ItemOrdemProducao> listaItemOrdemProducao) {
+        List<ItemOrdemProducaoDTO> listaItemOrdemProducaoDTO = new ArrayList<>();
+        for (ItemOrdemProducao itemOrdemProducao : listaItemOrdemProducao) {
+            listaItemOrdemProducaoDTO.add(toDTO(itemOrdemProducao));
+        }
+        return listaItemOrdemProducaoDTO;
+    }
+
+    private ItemOrdemProducao toEntity(ItemOrdemProducaoDTO itemOrdemProducaoDTO) {
+        return modelMapper.map(itemOrdemProducaoDTO, ItemOrdemProducao.class);
     }
 }

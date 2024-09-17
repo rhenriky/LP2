@@ -35,4 +35,16 @@ public class CardapioDAO extends DAO<Cardapio> {
         }
         return listaCardapio;
     }
+
+    public Cardapio buscarPorCodigo(int codigo) throws PersistenciaException {
+        Cardapio cardapio;
+        try {
+            Query query = this.entityManager.createQuery("SELECT c FROM Cardapio c WHERE c.codigo = :codigo");
+            query.setParameter("codigo", codigo);
+            cardapio = (Cardapio) query.getSingleResult();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Erro na seleção do cardápio pelo código - " + ex.getMessage());
+        }
+        return cardapio;
+    }
 }

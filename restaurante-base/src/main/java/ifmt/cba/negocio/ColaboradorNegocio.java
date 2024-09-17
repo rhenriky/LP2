@@ -11,6 +11,7 @@ import ifmt.cba.negocio.NegocioException;
 import ifmt.cba.persistencia.ColaboradorDAO;
 import ifmt.cba.persistencia.PersistenciaException;
 
+@SuppressWarnings("unused")
 public class ColaboradorNegocio {
 
     private ModelMapper modelMapper;
@@ -77,12 +78,8 @@ public class ColaboradorNegocio {
         }
     }
 
-    public List<ColaboradorDTO> pesquisarTodos() throws NegocioException {
-        try {
-            return this.toDTOAll(colaboradorDAO.buscarTodos());
-        } catch (PersistenciaException ex) {
-            throw new NegocioException("Erro ao pesquisar colaboradores - " + ex.getMessage());
-        }
+    public List<ColaboradorDTO> pesquisarTodos() throws NegocioException, PersistenciaException {
+        return this.toDTOAll(colaboradorDAO.buscarTodos());
     }
 
     public ColaboradorDTO pesquisarCodigo(int codigo) throws NegocioException {

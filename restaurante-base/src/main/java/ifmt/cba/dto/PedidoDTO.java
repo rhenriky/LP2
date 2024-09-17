@@ -3,7 +3,6 @@ package ifmt.cba.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,9 +18,9 @@ public class PedidoDTO {
     private LocalTime horaFinalizado;
     private EstadoPedidoDTO estado;
     private EntregadorDTO entregador;
-    private List<ItemPedidoDTO> listaItens;
-    
+    private List<ItemPedidoDTO> itensPedido;
 
+    // Getters and Setters
     public int getCodigo() {
         return codigo;
     }
@@ -86,16 +85,12 @@ public class PedidoDTO {
         this.horaFinalizado = horaFinalizado;
     }
 
-    public List<ItemPedidoDTO> getListaItens() {
-        return listaItens;
-    }
-
-    public void setListaItens(List<ItemPedidoDTO> listaItens) {
-        this.listaItens = listaItens;
-    }
-
     public EstadoPedidoDTO getEstado() {
         return estado;
+    }
+
+    public void setEstado(EstadoPedidoDTO estado) {
+        this.estado = estado;
     }
 
     public EntregadorDTO getEntregador() {
@@ -106,10 +101,13 @@ public class PedidoDTO {
         this.entregador = entregador;
     }
 
-    public void setEstado(EstadoPedidoDTO estado) {
-        this.estado = estado;
+    public List<ItemPedidoDTO> getItensPedido() {
+        return itensPedido;
     }
 
+    public void setItensPedido(List<ItemPedidoDTO> itensPedido) {
+        this.itensPedido = itensPedido;
+    }
 
     @Override
     public String toString() {

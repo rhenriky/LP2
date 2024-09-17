@@ -3,15 +3,11 @@ package ifmt.cba.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "estado_ordem_producao")
+@Table(name = "ordem_producao")
 public class EstadoOrdemProducao {
 
     @Id
@@ -20,6 +16,14 @@ public class EstadoOrdemProducao {
 
     @Column(name = "descricao")
     private String descricao;
+
+    @Column(name = "data_registro")
+    private LocalDateTime dataRegistro;
+
+    // Relacionamento com EstadoOrdemProducao
+    @ManyToOne(cascade = CascadeType.ALL) // Comportamento em cascata
+    @JoinColumn(name = "estado_codigo", referencedColumnName = "codigo")
+    private EstadoOrdemProducao estadoOrdemProducao;
 
     public int getCodigo() {
         return codigo;
@@ -35,6 +39,22 @@ public class EstadoOrdemProducao {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public LocalDateTime getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDateTime dataRegistro) {
+        this.dataRegistro = dataRegistro;
+    }
+
+    public EstadoOrdemProducao getEstadoOrdemProducao() {
+        return estadoOrdemProducao;
+    }
+
+    public void setEstadoOrdemProducao(EstadoOrdemProducao estadoOrdemProducao) {
+        this.estadoOrdemProducao = estadoOrdemProducao;
     }
 
     @Override
@@ -63,7 +83,15 @@ public class EstadoOrdemProducao {
         String retorno = "";
 
         if (this.descricao == null || this.descricao.length() < 3) {
-            retorno += "Descrição inválida";
+            retorno += "Descrição inválida.";
+        }
+
+        if (this.dataRegistro == null) {
+            retorno += "Data de registro inválida.";
+        }
+
+        if (this.estadoOrdemProducao == null || this.estadoOrdemProducao.getCodigo() <= 0) {
+            retorno += "Estado inválido.";
         }
 
         return retorno;

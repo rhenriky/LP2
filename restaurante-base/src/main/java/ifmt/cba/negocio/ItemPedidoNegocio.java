@@ -20,32 +20,9 @@ public class ItemPedidoNegocio {
         this.modelMapper = new ModelMapper();
     }
 
-    public void inserir(ItemPedidoDTO itemPedidoDTO) throws NegocioException {
-        ItemPedido itemPedido = this.toEntity(itemPedidoDTO);
-        String mensagemErros = itemPedido.validar();
-
-        if (!mensagemErros.isEmpty()) {
-            throw new NegocioException(mensagemErros);
-        }
-
-        try {
-            itemPedidoDAO.beginTransaction();
-            itemPedidoDAO.incluir(itemPedido);
-            itemPedidoDAO.commitTransaction();
-        } catch (PersistenciaException ex) {
-            itemPedidoDAO.rollbackTransaction();
-            throw new NegocioException("Erro ao incluir o item de pedido - " + ex.getMessage());
-        }
-    }
-
     public void alterar(ItemPedidoDTO itemPedidoDTO) throws NegocioException {
         ItemPedido itemPedido = this.toEntity(itemPedidoDTO);
-        String mensagemErros = itemPedido.validar();
-
-        if (!mensagemErros.isEmpty()) {
-            throw new NegocioException(mensagemErros);
-        }
-
+        
         try {
             if (itemPedidoDAO.buscarPorCodigo(itemPedido.getCodigo()) == null) {
                 throw new NegocioException("Não existe esse item de pedido");
@@ -86,15 +63,27 @@ public class ItemPedidoNegocio {
 
     public ItemPedidoDTO pesquisarCodigo(int codigo) throws NegocioException {
         try {
-            return this.toDTO(itemPedidoDAO.buscarPorCodigo(codigo));
+            ItemPedido itemPedido = itemPedidoDAO.buscarPorCodigo(codigo);
+            if (itemPedido == null) {
+                throw new NegocioException("Item de pedido não encontrado.");
+            }
+            return this.toDTO(itemPedido);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Erro ao pesquisar item de pedido pelo código - " + ex.getMessage());
         }
     }
 
+    public List<ItemPedidoDTO> buscarItensPorPedido(int codigoPedido) throws NegocioException {
+        try {
+            List<ItemPedido> itensPedido = itemPedidoDAO.buscarTodosItensPorPedido(codigoPedido);
+            return this.toDTOAll(itensPedido);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Erro ao pesquisar itens do pedido - " + ex.getMessage());
+        }
+    }
+
     public List<ItemPedidoDTO> toDTOAll(List<ItemPedido> listaItemPedido) {
         List<ItemPedidoDTO> listaDTO = new ArrayList<>();
-
         for (ItemPedido itemPedido : listaItemPedido) {
             listaDTO.add(this.toDTO(itemPedido));
         }
@@ -107,5 +96,10 @@ public class ItemPedidoNegocio {
 
     public ItemPedido toEntity(ItemPedidoDTO itemPedidoDTO) {
         return this.modelMapper.map(itemPedidoDTO, ItemPedido.class);
+    }
+
+    public void inserir(ItemPedido itemPedido1) {
+       
+        throw new UnsupportedOperationException("Unimplemented method 'inserir'");
     }
 }

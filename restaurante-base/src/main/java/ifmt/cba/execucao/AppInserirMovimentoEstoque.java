@@ -1,30 +1,35 @@
 package ifmt.cba.execucao;
 
+import ifmt.cba.entity.MovimentoEstoque;
 import ifmt.cba.dto.MovimentoEstoqueDTO;
 import ifmt.cba.negocio.MovimentoEstoqueNegocio;
-import ifmt.cba.negocio.NegocioException;
-import ifmt.cba.persistencia.MovimentoEstoqueDAO;
-import ifmt.cba.persistencia.FabricaEntityManager;
 import ifmt.cba.persistencia.PersistenciaException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class AppInserirMovimentoEstoque {
+
     public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("meuPU");
+        EntityManager em = emf.createEntityManager();
+
         try {
-            MovimentoEstoqueDAO movimentoEstoqueDAO = new MovimentoEstoqueDAO(FabricaEntityManager.getEntityManagerProducao());
-            MovimentoEstoqueNegocio movimentoEstoqueNegocio = new MovimentoEstoqueNegocio(movimentoEstoqueDAO);
+            MovimentoEstoqueNegocio movimentoEstoqueNegocio = new MovimentoEstoqueNegocio(em);
 
-            MovimentoEstoqueDTO movimentoEstoqueDTO = new MovimentoEstoqueDTO();
-            movimentoEstoqueDTO.setTipo("PRODUCAO");
-            movimentoEstoqueDTO.setQuantidade(50);
-            movimentoEstoqueNegocio.inserir(movimentoEstoqueDTO);
+            MovimentoEstoque movimentoEstoque = new MovimentoEstoque();
+            movimentoEstoque.setTipoMovimento(MovimentoEstoqueDTO.PRODUCAO);
+            movimentoEstoque.setDescricao("Movimento de produção de itens no estoque");
 
-            movimentoEstoqueDTO = new MovimentoEstoqueDTO();
-            movimentoEstoqueDTO.setTipo("COMPRA");
-            movimentoEstoqueDTO.setQuantidade(30);
-            movimentoEstoqueNegocio.inserir(movimentoEstoqueDTO);
+            movimentoEstoqueNegocio.inserir(movimentoEstoque);
 
-        } catch (PersistenciaException | NegocioException e) {
-            e.printStackTrace();
+            System.out.println("Movimento de estoque inserido com sucesso!");
+
+        } catch (PersistenciaException e) {
+            System.err.println("Erro: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
         }
     }
 }

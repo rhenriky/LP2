@@ -8,7 +8,9 @@ public class ItemPedidoDTO {
     private int codigo;
     private PreparoProdutoDTO preparoProduto;
     private int quantidadePorcao;
-   
+    private int quantidade;
+    private int pedidoCodigo;
+
     public int getCodigo() {
         return codigo;
     }
@@ -33,10 +35,29 @@ public class ItemPedidoDTO {
         this.quantidadePorcao = quantidadePorcao;
     }
 
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public int getPedidoCodigo() {
+        return pedidoCodigo;
+    }
+
+    public void setPedidoCodigo(int pedidoCodigo) {
+        this.pedidoCodigo = pedidoCodigo;
+    }
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
+    public String getNome() {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'getNome'");
+    }
 }

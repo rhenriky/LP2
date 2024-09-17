@@ -3,6 +3,8 @@ package ifmt.cba.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import ifmt.cba.dto.ProdutoDTO;
+import ifmt.cba.dto.RegistroEstoqueDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class RegistroEstoque {
     @Column(name = "produto_codigo")
     private int produtoCodigo;
 
+    // Getters e Setters
     public int getCodigo() {
         return codigo;
     }
@@ -57,6 +60,28 @@ public class RegistroEstoque {
 
     public void setProdutoCodigo(int produtoCodigo) {
         this.produtoCodigo = produtoCodigo;
+    }
+
+    // Método para converter de DTO para Entity
+    public static RegistroEstoque fromDTO(RegistroEstoqueDTO dto) {
+        RegistroEstoque entity = new RegistroEstoque();
+        entity.setCodigo(dto.getCodigo());
+        entity.setDataMovimento(dto.getData().atStartOfDay()); // Converter LocalDate para LocalDateTime
+        entity.setQuantidade(dto.getQuantidade());
+        entity.setProdutoCodigo(dto.getProduto().getCodigo()); // Assumindo que ProdutoDTO tem getCodigo()
+        return entity;
+    }
+
+    // Método para converter de Entity para DTO
+    public RegistroEstoqueDTO toDTO() {
+        RegistroEstoqueDTO dto = new RegistroEstoqueDTO();
+        dto.setCodigo(this.codigo);
+        dto.setData(this.dataMovimento.toLocalDate()); // Converter LocalDateTime para LocalDate
+        dto.setQuantidade(this.quantidade);
+        ProdutoDTO produtoDTO = new ProdutoDTO();
+        produtoDTO.setCodigo(this.produtoCodigo); // Assumindo que ProdutoDTO tem setCodigo()
+        dto.setProduto(produtoDTO);
+        return dto;
     }
 
     @Override

@@ -14,18 +14,18 @@ public class ClienteDAO extends DAO<Cliente> {
         super(entityManager);
     }
 
+    // Método para buscar cliente por código
     public Cliente buscarPorCodigo(int codigo) throws PersistenciaException {
-
         Cliente cliente = null;
-
         try {
             cliente = this.entityManager.find(Cliente.class, codigo);
         } catch (Exception ex) {
-            throw new PersistenciaException("Erro na selecao por codigo - " + ex.getMessage());
+            throw new PersistenciaException("Erro na seleção por código - " + ex.getMessage());
         }
         return cliente;
     }
 
+    // Método para buscar cliente por CPF
     public Cliente buscarPorCPF(String CPF) throws PersistenciaException {
         Cliente cliente;
         try {
@@ -37,11 +37,12 @@ public class ClienteDAO extends DAO<Cliente> {
             cliente = null;
         } catch (Exception ex) {
             cliente = null;
-            throw new PersistenciaException("Erro na selecao por CPF - " + ex.getMessage());
+            throw new PersistenciaException("Erro na seleção por CPF - " + ex.getMessage());
         }
         return cliente;
     }
 
+    // Método para buscar cliente por parte do nome
     @SuppressWarnings("unchecked")
     public List<Cliente> buscarPorParteNome(String nome) throws PersistenciaException {
         List<Cliente> listaCliente;
@@ -51,9 +52,23 @@ public class ClienteDAO extends DAO<Cliente> {
             query.setParameter("pNome", "%" + nome.toUpperCase().trim() + "%");
             listaCliente = query.getResultList();
         } catch (Exception ex) {
-            throw new PersistenciaException("Erro na selecao por parte do nome - " + ex.getMessage());
+            throw new PersistenciaException("Erro na seleção por parte do nome - " + ex.getMessage());
         }
         return listaCliente;
     }
 
+    // Método para buscar todos os clientes ordenados por nome
+    @SuppressWarnings("unchecked")
+    public List<Cliente> buscarTodosOrdenadosPorNome() throws PersistenciaException {
+        List<Cliente> listaCliente;
+        try {
+            // Consulta para buscar todos os clientes ordenados em ordem crescente
+            Query query = this.entityManager
+                    .createQuery("SELECT c FROM Cliente c ORDER BY c.nome ASC");
+            listaCliente = query.getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Erro na seleção de todos os clientes ordenados por nome - " + ex.getMessage());
+        }
+        return listaCliente;
+    }
 }

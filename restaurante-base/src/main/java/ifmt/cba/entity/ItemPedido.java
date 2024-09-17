@@ -1,31 +1,39 @@
 package ifmt.cba.entity;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "item_pedido")
-public class ItemPedido {
+public class ItemPedido implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
 
-    @Column(name = "quantidade")
+    @ManyToOne
+    @JoinColumn(name = "preparo_produto_codigo", nullable = false)
+    private PreparoProduto preparoProduto;
+
+    @Column(name = "quantidade_porcao", nullable = false)
+    private int quantidadePorcao;
+
+    @Column(name = "quantidade", nullable = false)
     private int quantidade;
 
-    @Column(name = "produto_codigo")
-    private int produtoCodigo;
-
-    @Column(name = "pedido_codigo")
-    private int pedidoCodigo;
+    @ManyToOne
+    @JoinColumn(name = "pedido_codigo", nullable = false)
+    private Pedido pedido;
 
     public int getCodigo() {
         return codigo;
@@ -33,6 +41,22 @@ public class ItemPedido {
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
+    }
+
+    public PreparoProduto getPreparoProduto() {
+        return preparoProduto;
+    }
+
+    public void setPreparoProduto(PreparoProduto preparoProduto) {
+        this.preparoProduto = preparoProduto;
+    }
+
+    public int getQuantidadePorcao() {
+        return quantidadePorcao;
+    }
+
+    public void setQuantidadePorcao(int quantidadePorcao) {
+        this.quantidadePorcao = quantidadePorcao;
     }
 
     public int getQuantidade() {
@@ -43,64 +67,22 @@ public class ItemPedido {
         this.quantidade = quantidade;
     }
 
-    public int getProdutoCodigo() {
-        return produtoCodigo;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public void setProdutoCodigo(int produtoCodigo) {
-        this.produtoCodigo = produtoCodigo;
-    }
-
-    public int getPedidoCodigo() {
-        return pedidoCodigo;
-    }
-
-    public void setPedidoCodigo(int pedidoCodigo) {
-        this.pedidoCodigo = pedidoCodigo;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + codigo;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ItemPedido other = (ItemPedido) obj;
-        if (codigo != other.codigo)
-            return false;
-        return true;
-    }
-
-    public String validar() {
-        String retorno = "";
-
-        if (this.quantidade <= 0) {
-            retorno += "Quantidade deve ser maior que zero";
-        }
-
-        if (this.produtoCodigo <= 0) {
-            retorno += "Produto inválido";
-        }
-
-        if (this.pedidoCodigo <= 0) {
-            retorno += "Pedido inválido";
-        }
-
-        return retorno;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        return "ItemPedido{" +
+                "codigo=" + codigo +
+                ", preparoProduto=" + preparoProduto +
+                ", quantidadePorcao=" + quantidadePorcao +
+                ", quantidade=" + quantidade +
+                ", pedido=" + pedido +
+                '}';
     }
 }

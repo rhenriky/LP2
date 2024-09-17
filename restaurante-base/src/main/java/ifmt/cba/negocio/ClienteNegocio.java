@@ -1,10 +1,7 @@
 package ifmt.cba.negocio;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
-
 import ifmt.cba.dto.ClienteDTO;
 import ifmt.cba.entity.Cliente;
 import ifmt.cba.persistencia.ClienteDAO;
@@ -13,102 +10,119 @@ import ifmt.cba.persistencia.PersistenciaException;
 public class ClienteNegocio {
 
     private ModelMapper modelMapper;
-	private ClienteDAO clienteDAO;
+    private ClienteDAO clienteDAO;
 
-	public ClienteNegocio(ClienteDAO clienteDAO) {
-		this.clienteDAO = clienteDAO;
-		this.modelMapper = new ModelMapper();
-	}
+    public ClienteNegocio(ClienteDAO clienteDAO) {
+        this.clienteDAO = clienteDAO;
+        this.modelMapper = new ModelMapper();
+    }
 
-	public void inserir(ClienteDTO clienteDTO) throws NegocioException {
+    // Método para inserir cliente com validação de CPF já existente
+    public void inserir(ClienteDTO clienteDTO) throws NegocioException {
+        Cliente cliente = toEntity(clienteDTO);
+        String mensagemErros = cliente.validar();
 
-		Cliente cliente = this.toEntity(clienteDTO);
-		String mensagemErros = cliente.validar();
+        if (!mensagemErros.isEmpty()) {
+            throw new NegocioException("Validação falhou: " + mensagemErros);
+        }
 
-		if (!mensagemErros.isEmpty()) {
-			throw new NegocioException(mensagemErros);
-		}
+        try {
+            if (clienteDAO.buscarPorCPF(cliente.getCPF()) != null) {
+                throw new NegocioException("Cliente com CPF já cadastrado.");
+            }
+            clienteDAO.beginTransaction();
+            clienteDAO.incluir(cliente);
+            clienteDAO.commitTransaction();
+        } catch (PersistenciaException ex) {
+            clienteDAO.rollbackTransaction();
+            throw new NegocioException("Erro ao incluir cliente: " + ex.getMessage());
+        }
+    }
 
-		try {
-			if (clienteDAO.buscarPorCPF(cliente.getCPF()) != null) {
-				throw new NegocioException("Ja existe esse cliente");
-			}
-			clienteDAO.beginTransaction();
-			clienteDAO.incluir(cliente);
-			clienteDAO.commitTransaction();
-		} catch (PersistenciaException ex) {
-			clienteDAO.rollbackTransaction();
-			throw new NegocioException("Erro ao incluir o cliente - " + ex.getMessage());
-		}
-	}
+    // Método para alterar cliente
+    public void alterar(ClienteDTO clienteDTO) throws NegocioException {
+        Cliente cliente = toEntity(clienteDTO);
+        String mensagemErros = cliente.validar();
 
-	public void alterar(ClienteDTO clienteDTO) throws NegocioException {
+        if (!mensagemErros.isEmpty()) {
+            throw new NegocioException("Validação falhou: " + mensagemErros);
+        }
 
-		Cliente cliente = this.toEntity(clienteDTO);
-		String mensagemErros = cliente.validar();
-		if (!mensagemErros.isEmpty()) {
-			throw new NegocioException(mensagemErros);
-		}
-		try {
-			if (clienteDAO.buscarPorCodigo(cliente.getCodigo()) == null) {
-				throw new NegocioException("Nao existe esse cliente");
-			}
-			clienteDAO.beginTransaction();
-			clienteDAO.alterar(cliente);
-			clienteDAO.commitTransaction();
-		} catch (PersistenciaException ex) {
-			clienteDAO.rollbackTransaction();
-			throw new NegocioException("Erro ao alterar o cliente - " + ex.getMessage());
-		}
-	}
+        try {
+            if (clienteDAO.buscarPorCodigo(cliente.getCodigo()) == null) {
+                throw new NegocioException("Cliente não encontrado.");
+            }
+            clienteDAO.beginTransaction();
+            clienteDAO.alterar(cliente);
+            clienteDAO.commitTransaction();
+        } catch (PersistenciaException ex) {
+            clienteDAO.rollbackTransaction();
+            throw new NegocioException("Erro ao alterar cliente: " + ex.getMessage());
+        }
+    }
 
-	public void excluir(int codigo) throws NegocioException {
+    // Método para excluir cliente
+    public void excluir(int codigo) throws NegocioException {
+        try {
+            Cliente cliente = clienteDAO.buscarPorCodigo(codigo);
+            if (cliente == null) {
+                throw new NegocioException("Cliente não encontrado.");
+            }
 
-		try {
-			Cliente cliente = clienteDAO.buscarPorCodigo(codigo);
-			if (cliente == null) {
-				throw new NegocioException("Nao existe esse cliente");
-			}
+            clienteDAO.beginTransaction();
+            clienteDAO.excluir(cliente);
+            clienteDAO.commitTransaction();
+        } catch (PersistenciaException ex) {
+            clienteDAO.rollbackTransaction();
+            throw new NegocioException("Erro ao excluir cliente: " + ex.getMessage());
+        }
+    }
 
-			clienteDAO.beginTransaction();
-			clienteDAO.excluir(cliente);
-			clienteDAO.commitTransaction();
-		} catch (PersistenciaException ex) {
-			clienteDAO.rollbackTransaction();
-			throw new NegocioException("Erro ao excluir o cliente - " + ex.getMessage());
-		}
-	}
+    // Método para pesquisar clientes por parte do nome
+    public List<ClienteDTO> pesquisaParteNome(String parteNome) throws NegocioException {
+        try {
+            return toDTOAll(clienteDAO.buscarPorParteNome(parteNome));
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Erro ao pesquisar cliente por parte do nome: " + ex.getMessage());
+        }
+    }
 
-	public List<ClienteDTO> pesquisaParteNome(String parteNome) throws NegocioException {
-		try {
-			return this.toDTOAll(clienteDAO.buscarPorParteNome(parteNome));
-		} catch (PersistenciaException ex) {
-			throw new NegocioException("Erro ao pesquisar cliente pelo nome - " + ex.getMessage());
-		}
-	}
+    // Método para pesquisar cliente por código
+    public ClienteDTO pesquisaCodigo(int codigo) throws NegocioException {
+        try {
+            Cliente cliente = clienteDAO.buscarPorCodigo(codigo);
+            if (cliente == null) {
+                throw new NegocioException("Cliente não encontrado.");
+            }
+            return toDTO(cliente);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Erro ao pesquisar cliente pelo código: " + ex.getMessage());
+        }
+    }
 
-	public ClienteDTO pesquisaCodigo(int codigo) throws NegocioException {
-		try {
-			return this.toDTO(clienteDAO.buscarPorCodigo(codigo));
-		} catch (PersistenciaException ex) {
-			throw new NegocioException("Erro ao pesquisar cliente pelo codigo - " + ex.getMessage());
-		}
-	}
+    // Método para pesquisar todos os clientes ordenados por nome
+    public List<ClienteDTO> pesquisarTodosOrdenadosPorNome() throws NegocioException {
+        try {
+            return toDTOAll(clienteDAO.buscarTodosOrdenadosPorNome());
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Erro ao pesquisar clientes: " + ex.getMessage());
+        }
+    }
 
-	public List<ClienteDTO> toDTOAll(List<Cliente> listaCliente) {
-		List<ClienteDTO> listaDTO = new ArrayList<ClienteDTO>();
+    // Conversão de lista de Cliente para lista de ClienteDTO usando stream
+    private List<ClienteDTO> toDTOAll(List<Cliente> listaClientes) {
+        return listaClientes.stream()
+                .map(cliente -> modelMapper.map(cliente, ClienteDTO.class))
+                .toList();
+    }
 
-		for (Cliente cliente : listaCliente) {
-			listaDTO.add(this.toDTO(cliente));
-		}
-		return listaDTO;
-	}
+    // Conversão de Cliente para ClienteDTO
+    private ClienteDTO toDTO(Cliente cliente) {
+        return modelMapper.map(cliente, ClienteDTO.class);
+    }
 
-	public ClienteDTO toDTO(Cliente cliente) {
-		return this.modelMapper.map(cliente, ClienteDTO.class);
-	}
-
-	public Cliente toEntity(ClienteDTO clienteDTO) {
-		return this.modelMapper.map(clienteDTO, Cliente.class);
-	}
+    // Conversão de ClienteDTO para Cliente
+    private Cliente toEntity(ClienteDTO clienteDTO) {
+        return modelMapper.map(clienteDTO, Cliente.class);
+    }
 }

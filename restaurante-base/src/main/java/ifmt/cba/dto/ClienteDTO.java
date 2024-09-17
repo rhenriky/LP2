@@ -1,8 +1,5 @@
 package ifmt.cba.dto;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 public class ClienteDTO {
 
     private int codigo;
@@ -14,8 +11,19 @@ public class ClienteDTO {
     private String numero;
     private BairroDTO bairro;
     private String pontoReferencia;
-    
 
+    // Construtor padrão
+    public ClienteDTO() {
+    }
+
+    // Construtor com parâmetros
+    public ClienteDTO(int codigo, String nome, String CPF) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.CPF = CPF;
+    }
+
+    // Getters e Setters
     public int getCodigo() {
         return codigo;
     }
@@ -36,16 +44,24 @@ public class ClienteDTO {
         return RG;
     }
 
-    public void setRG(String rG) {
-        RG = rG;
+    public void setRG(String RG) {
+        this.RG = RG;
     }
 
     public String getCPF() {
         return CPF;
     }
 
-    public void setCPF(String cPF) {
-        CPF = cPF;
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public String getLogradouro() {
@@ -80,17 +96,10 @@ public class ClienteDTO {
         this.pontoReferencia = pontoReferencia;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        return "ClienteDTO [codigo=" + codigo + ", nome=" + nome + ", RG=" + RG + ", CPF=" + CPF + ", telefone=" + telefone
+                + ", logradouro=" + logradouro + ", numero=" + numero + ", bairro=" + bairro + ", pontoReferencia="
+                + pontoReferencia + "]";
     }
 }

@@ -20,8 +20,8 @@ public class PreparoProdutoNegocio {
         this.modelMapper = new ModelMapper();
     }
 
-    public void inserir(PreparoProdutoDTO preparoProdutoDTO) throws NegocioException {
-        PreparoProduto preparoProduto = this.toEntity(preparoProdutoDTO);
+    public void inserir(PreparoProduto preparoProduto1) throws NegocioException {
+        PreparoProduto preparoProduto = this.toEntity(preparoProduto1);
         String mensagemErros = preparoProduto.validar();
 
         if (!mensagemErros.isEmpty()) {
@@ -60,6 +60,11 @@ public class PreparoProdutoNegocio {
         }
     }
 
+    private PreparoProduto toEntity(PreparoProdutoDTO preparoProdutoDTO) {
+       
+        throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
+    }
+
     public void excluir(int codigo) throws NegocioException {
         try {
             PreparoProduto preparoProduto = preparoProdutoDAO.buscarPorCodigo(codigo);
@@ -86,7 +91,11 @@ public class PreparoProdutoNegocio {
 
     public PreparoProdutoDTO pesquisarCodigo(int codigo) throws NegocioException {
         try {
-            return this.toDTO(preparoProdutoDAO.buscarPorCodigo(codigo));
+            PreparoProduto preparoProduto = preparoProdutoDAO.buscarPorCodigo(codigo);
+            if (preparoProduto == null) {
+                throw new NegocioException("Preparo de produto não encontrado.");
+            }
+            return this.toDTO(preparoProduto);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Erro ao pesquisar preparo de produto pelo código - " + ex.getMessage());
         }
@@ -94,7 +103,6 @@ public class PreparoProdutoNegocio {
 
     public List<PreparoProdutoDTO> toDTOAll(List<PreparoProduto> listaPreparoProduto) {
         List<PreparoProdutoDTO> listaDTO = new ArrayList<>();
-
         for (PreparoProduto preparoProduto : listaPreparoProduto) {
             listaDTO.add(this.toDTO(preparoProduto));
         }
@@ -105,7 +113,7 @@ public class PreparoProdutoNegocio {
         return this.modelMapper.map(preparoProduto, PreparoProdutoDTO.class);
     }
 
-    public PreparoProduto toEntity(PreparoProdutoDTO preparoProdutoDTO) {
-        return this.modelMapper.map(preparoProdutoDTO, PreparoProduto.class);
+    public PreparoProduto toEntity(PreparoProduto preparoProduto1) {
+        return this.modelMapper.map(preparoProduto1, PreparoProduto.class);
     }
 }

@@ -3,7 +3,7 @@ package ifmt.cba.dto;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class GrupoAlimentarDTO {
+public class GrupoAlimentoDTO {
     
     private int codigo;
     private String nome;

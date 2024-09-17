@@ -16,12 +16,12 @@ public static void main(String[] args) {
             BairroNegocio bairroNegocio = new BairroNegocio(bairroDAO);
     
             BairroDTO bairroDTO = new BairroDTO();
-            bairroDTO.setNome("Centro");
+            bairroDTO.setNome("CPA-4");
             bairroDTO.setCustoEntrega(7.00f);
             bairroNegocio.inserir(bairroDTO);
 
             bairroDTO = new BairroDTO();
-            bairroDTO.setNome("Coxipo");
+            bairroDTO.setNome("Serra-Dourada");
             bairroDTO.setCustoEntrega(8.00f);
             bairroNegocio.inserir(bairroDTO);
 
